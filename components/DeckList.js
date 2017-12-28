@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet} from 'react-native'
-import { ligthGray, darkGray } from '../utils/colors'
+import { View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import { ligthGray, darkGray, white } from '../utils/colors'
 
 class DeckList extends Component {
   state = {
@@ -37,10 +37,11 @@ class DeckList extends Component {
         {
           decks && decks.map((deck) => {
             return(
-              <View style={styles.itemBox} key={deck.title}>
+              <TouchableOpacity style={styles.itemBox} key={deck.title}
+                onPress={() => this.props.navigation.navigate('DeckDetail', { title: deck.title })}>
                 <Text style={styles.itemTitle}>{deck.title}</Text>
                 <Text style={styles.itemSubTitle}>{deck.questions.length} cards</Text>
-              </View>
+              </TouchableOpacity>
             )
           })
         }
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
+    backgroundColor: white
   },
   itemBox: {
     borderBottomColor: ligthGray,

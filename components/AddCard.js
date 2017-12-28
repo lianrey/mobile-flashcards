@@ -1,14 +1,22 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import { ligthGray, darkGray, black, white } from '../utils/colors'
+import { green, red, white, darkGray, ligthGray, black } from '../utils/colors'
+import TextButton from './TextButton'
 
-class NewDeck extends Component {
+class AddCard extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Add card'
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.question}>What is the title of your new deck?</Text>
         <View style={styles.inputWrapper}>
-          <TextInput style={styles.input} placeholder="Deck title"></TextInput>
+          <TextInput style={styles.input} placeholder="Question"></TextInput>
+        </View>
+        <View style={styles.inputWrapper}>
+          <TextInput style={styles.input} placeholder="Answer"></TextInput>
         </View>
         <TouchableOpacity style={styles.submit}>
           <Text style={styles.submitBtnText}>
@@ -26,14 +34,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: white
   },
-  question: {
-    fontSize: 50,
-    paddingTop: 50,
-    paddingBottom: 50,
-    paddingRight: 20,
-    paddingLeft: 20,
-    textAlign: 'center'
-  },
   inputWrapper: {
     alignSelf: 'stretch',
     borderColor: darkGray,
@@ -44,7 +44,9 @@ const styles = StyleSheet.create({
     paddingRight: 4,
     paddingLeft: 4,
     marginRight: 20,
-    marginLeft: 20
+    marginLeft: 20,
+    marginTop: 25,
+    marginBottom: 20
   },
   input:{
     borderBottomColor: ligthGray,
@@ -70,4 +72,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default NewDeck
+export default AddCard

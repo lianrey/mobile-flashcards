@@ -1,8 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View, Platform, StatusBar } from 'react-native'
-import { TabNavigator } from 'react-navigation'
+import { TabNavigator, StackNavigator } from 'react-navigation'
 import DeckList from './components/DeckList.js'
 import NewDeck from './components/NewDeck.js'
+import AddCard from './components/AddCard.js'
+import DeckDetail from './components/DeckDetail.js'
+import Quiz from './components/Quiz.js'
 import { purple, white, black } from './utils/colors'
 import { Constants } from 'expo'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -50,12 +53,45 @@ const Tabs = TabNavigator({
   }
 })
 
+const MainNavigator = StackNavigator({
+  Home: {
+    screen: Tabs,
+  },
+  DeckDetail: {
+    screen: DeckDetail,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: black,
+      }
+    }
+  },
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: black,
+      }
+    }
+  },
+  AddCard: {
+    screen: AddCard,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: black,
+      }
+    }
+  }
+})
+
 export default class App extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
         <UdaciStatusBar backgroundColor={black} barStyle="light-content" />
-        <Tabs />
+        <MainNavigator />
       </View>
     )
   }
