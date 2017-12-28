@@ -1,15 +1,63 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { StyleSheet, Text, View, Platform, StatusBar } from 'react-native'
+import { TabNavigator } from 'react-navigation'
+import DeckList from './components/DeckList.js'
+import NewDeck from './components/NewDeck.js'
+import { purple, white, black } from './utils/colors'
+import { Constants } from 'expo'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+
+function UdaciStatusBar ({backgroundColor, ...props}) {
+  return (
+    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    </View>
+  )
+}
+
+const Tabs = TabNavigator({
+  DeckList: {
+    screen: DeckList,
+    navigationOptions: {
+      tabBarLabel: 'DECKS',
+      tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name='cards-outline' size={30} color={black} />
+    },
+  },
+  NewDeck: {
+    screen: NewDeck,
+    navigationOptions: {
+      tabBarLabel: 'NEW DECK',
+      tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name='new-box' size={30} color={black} />
+    },
+  }
+}, {
+  navigationOptions: {
+    header: null
+  },
+  tabBarOptions: {
+    activeTintColor: Platform.OS === 'ios' ? purple : white,
+    style: {
+      height: 56,
+      backgroundColor: Platform.OS === 'ios' ? white : purple,
+      shadowColor: 'rgba(0, 0, 0, 0.24)',
+      shadowOffset: {
+        width: 0,
+        height: 3
+      },
+      shadowRadius: 6,
+      shadowOpacity: 1
+    }
+  }
+})
 
 export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+      <View style={{flex: 1}}>
+        <UdaciStatusBar backgroundColor={black} barStyle="light-content" />
+        <Tabs />
       </View>
-    );
+    )
   }
 }
 
