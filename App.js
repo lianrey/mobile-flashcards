@@ -9,6 +9,9 @@ import Quiz from './components/Quiz.js'
 import { purple, white, black } from './utils/colors'
 import { Constants } from 'expo'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
   return (
@@ -89,10 +92,12 @@ const MainNavigator = StackNavigator({
 export default class App extends React.Component {
   render() {
     return (
-      <View style={{flex: 1}}>
-        <UdaciStatusBar backgroundColor={black} barStyle="light-content" />
-        <MainNavigator />
-      </View>
+      <Provider store={createStore(reducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
+        <View style={{flex: 1}}>
+          <UdaciStatusBar backgroundColor={black} barStyle="light-content" />
+          <MainNavigator />
+        </View>
+      </Provider>
     )
   }
 }

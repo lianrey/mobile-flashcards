@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import { ligthGray, darkGray, white } from '../utils/colors'
+import { fetchDeckResults } from '../utils/api'
+import { connect } from 'react-redux'
 
 class DeckList extends Component {
   state = {
@@ -29,6 +31,12 @@ class DeckList extends Component {
       }
     ]
   }
+
+  componentDidMount () {
+    const { dispatch } = this.props
+
+  }
+
   render() {
     const { decks } = this.state
 
@@ -75,4 +83,12 @@ const styles = StyleSheet.create({
   }
 })
 
-export default DeckList
+function mapStateToProps (decks) {
+  return {
+    decks
+  }
+}
+
+export default connect(
+  mapStateToProps,
+)(DeckList)

@@ -9,6 +9,7 @@ class DeckDetail extends Component {
       title: 'React'
     }
   }
+
   render() {
     return (
       <View style={styles.container}>
