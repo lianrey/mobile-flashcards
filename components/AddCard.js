@@ -9,6 +9,7 @@ class AddCard extends Component {
       title: 'Add card'
     }
   }
+
   render() {
     return (
       <View style={styles.container}>

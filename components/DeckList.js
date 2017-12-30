@@ -1,59 +1,39 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native'
 import { ligthGray, darkGray, white } from '../utils/colors'
 import { fetchDeckResults } from '../utils/api'
 import { connect } from 'react-redux'
 import { receiveDecks } from '../actions'
 
-class DeckList extends Component {
-  state = {
-    decks: [
-      {
-        title: 'React',
-        questions: [
-          {
-            question: 'What is React?',
-            answer: 'A library for managing user interfaces'
-          },
-          {
-            question: 'Where do you make Ajax requests in React?',
-            answer: 'The componentDidMount lifecycle event'
-          }
-        ]
-      },
-      {
-        title: 'JavaScript',
-        questions: [
-          {
-            question: 'What is a closure?',
-            answer: 'The combination of a function and the lexical environment within which that function was declared.'
-          }
-        ]
-      }
-    ]
-  }
+function Deck ({deck, navigation}) {
+  return (
+    <TouchableOpacity style={styles.itemBox} key={deck.title}
+      onPress={() => navigation.navigate('DeckDetail', { title: deck.title })}>
+      <Text style={styles.itemTitle}>{deck.title}</Text>
+      <Text style={styles.itemSubTitle}>{deck.questions.length} cards</Text>
+    </TouchableOpacity>
+  )
+}
 
+class DeckList extends Component {
   componentDidMount () {
     const { dispatch } = this.props
 
     fetchDeckResults()
-      .then((result) => dispatch(receiveDecks(result.decks)))
+      .then((result) => dispatch(receiveDecks(result)))
   }
 
   render() {
     const { decks } = this.props
+    
     return (
       <View style={styles.container}>
         {
-          decks && decks.map((deck) => {
-            return(
-              <TouchableOpacity style={styles.itemBox} key={deck.title}
-                onPress={() => this.props.navigation.navigate('DeckDetail', { title: deck.title })}>
-                <Text style={styles.itemTitle}>{deck.title}</Text>
-                <Text style={styles.itemSubTitle}>{deck.questions.length} cards</Text>
-              </TouchableOpacity>
-            )
-          })
+          decks &&
+          <FlatList
+            data={decks}
+            renderItem={({item}) => <Deck deck={item} navigation={this.props.navigation}></Deck>}
+          />
         }
       </View>
     )

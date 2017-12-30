@@ -1,16 +1,44 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import { ligthGray, darkGray, black, white } from '../utils/colors'
+import { connect } from 'react-redux'
+import { receiveDecks, addDeck } from '../actions'
+import { addDeckApi } from '../utils/api'
+import { NavigationActions } from 'react-navigation'
 
 class NewDeck extends Component {
+  state = {
+    text: ''
+  }
+
+  add = (title) => {
+    const { dispatch, decks } = this.props
+
+    let deck = {
+      title: title,
+      questions: []
+    }
+
+    addDeckApi(deck).then(() => {
+      dispatch(addDeck(deck))
+      this.setState({ text: ''})
+      this.toHome()
+    })
+  }
+
+  toHome = () => {
+    this.props.navigation.dispatch(NavigationActions.back({key: 'NewDeck'}))
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.question}>What is the title of your new deck?</Text>
         <View style={styles.inputWrapper}>
-          <TextInput style={styles.input} placeholder="Deck title"></TextInput>
+          <TextInput style={styles.input} placeholder="Deck title" value={this.state.text}
+            onChangeText={(text) => this.setState({text})}></TextInput>
         </View>
-        <TouchableOpacity style={styles.submit}>
+        <TouchableOpacity style={styles.submit} onPress={() =>this.add(this.state.text)}>
           <Text style={styles.submitBtnText}>
             Submit
           </Text>
@@ -70,4 +98,10 @@ const styles = StyleSheet.create({
   }
 })
 
-export default NewDeck
+function mapStateToProps (decks) {
+  return {
+    decks
+  }
+}
+
+export default connect(mapStateToProps)(NewDeck)
