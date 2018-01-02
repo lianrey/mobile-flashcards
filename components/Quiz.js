@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
-import { green, red, white, darkGray } from '../utils/colors'
+import { green, red, white, darkGray, black } from '../utils/colors'
 import TextButton from './TextButton'
+import {
+  clearLocalNotification,
+  setLocalNotification
+} from '../utils/helpers'
 
 class Quiz extends Component {
   state = {
@@ -67,6 +71,8 @@ class Quiz extends Component {
       else{
         const score = (this.state.correctTotal * 100)/deck.questions.length
 
+        clearLocalNotification()
+          .then(setLocalNotification)
         this.setState(
           {
             score,
@@ -102,8 +108,12 @@ class Quiz extends Component {
             <View style={{flex:1}}>
               <TextButton backgroundColor={green} borderColor={green} textColor={white}
                 onPress={() => {this.startOver()}}>
-                  Start Over
+                  Restart Quiz
               </TextButton>
+                <TextButton backgroundColor={black} borderColor={black} textColor={white}
+                  onPress={() => { this.props.navigation.goBack(null)}}>
+                    Back to Deck
+                </TextButton>
             </View>
           </View>
         </View>
