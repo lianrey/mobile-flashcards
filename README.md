@@ -1,4 +1,4 @@
-## Redux Final Project
+## React Native Final Project
 
 This is the final assessment project for Udacity's React Native course.
 
