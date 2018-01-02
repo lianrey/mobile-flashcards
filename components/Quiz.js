@@ -7,7 +7,10 @@ class Quiz extends Component {
   state = {
     title: '',
     subTitle: 'Answer',
-    currentIndex: 0
+    currentIndex: 0,
+    theEnd: false,
+    score: 0,
+    correctTotal: 0
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -16,14 +19,19 @@ class Quiz extends Component {
     }
   }
 
+  reset = () => {
+    return {
+      title: this.props.navigation.state.params.deck.questions[0].question,
+      subTitle: 'Answer',
+      currentIndex: 0,
+      theEnd: false,
+      score: 0,
+      correctTotal: 0
+    }
+  }
+
   componentDidMount() {
-    this.setState(
-      {
-        title: this.props.navigation.state.params.deck.questions[0].question,
-        subTitle: 'Answer',
-        currentIndex: 0
-      }
-    )
+    this.setState(this.reset())
   }
 
   toggleAnswer = () => {
@@ -44,11 +52,33 @@ class Quiz extends Component {
 
     this.setState(
       {
-        currentIndex: index,
-        title: deck.questions[index].question,
-        subTitle: 'Answer'
+        correctTotal: (type === 'Correct') ? this.state.correctTotal + 1: this.state.correctTotal
+      },
+      () => {
+      if(index < deck.questions.length) {
+        this.setState(
+          {
+            currentIndex: index,
+            title: deck.questions[index].question,
+            subTitle: 'Answer'
+          }
+        )
       }
-    )
+      else{
+        const score = (this.state.correctTotal * 100)/deck.questions.length
+
+        this.setState(
+          {
+            score,
+            theEnd: true
+          }
+        )
+      }
+    })
+  }
+
+  startOver = () => {
+    this.setState(this.reset())
   }
 
   render() {
@@ -58,6 +88,24 @@ class Quiz extends Component {
       return(
         <View>
           <Text style={styles.itemTitle}>You need to add cards to start a quiz</Text>
+        </View>
+      )
+    }
+
+    if(this.state.theEnd){
+      return(
+        <View style={styles.mainContainer}>
+          <View style={styles.container}>
+            <View style={styles.first}>
+              <Text style={styles.itemTitle}>Score: {this.state.score}</Text>
+            </View>
+            <View style={{flex:1}}>
+              <TextButton backgroundColor={green} borderColor={green} textColor={white}
+                onPress={() => {this.startOver()}}>
+                  Start Over
+              </TextButton>
+            </View>
+          </View>
         </View>
       )
     }
