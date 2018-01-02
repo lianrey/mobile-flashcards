@@ -7,8 +7,8 @@ import { receiveDecks } from '../actions'
 
 function Deck ({deck, navigation}) {
   return (
-    <TouchableOpacity style={styles.itemBox} key={deck.title}
-      onPress={() => navigation.navigate('DeckDetail', { title: deck.title })}>
+    <TouchableOpacity style={styles.itemBox}
+      onPress={() => navigation.navigate('DeckDetail', { deck: deck })}>
       <Text style={styles.itemTitle}>{deck.title}</Text>
       <Text style={styles.itemSubTitle}>{deck.questions.length} cards</Text>
     </TouchableOpacity>
@@ -25,13 +25,14 @@ class DeckList extends Component {
 
   render() {
     const { decks } = this.props
-    
+
     return (
       <View style={styles.container}>
         {
           decks &&
           <FlatList
             data={decks}
+            keyExtractor={(item, index) => index}
             renderItem={({item}) => <Deck deck={item} navigation={this.props.navigation}></Deck>}
           />
         }

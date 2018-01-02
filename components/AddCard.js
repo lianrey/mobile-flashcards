@@ -2,24 +2,43 @@ import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import { green, red, white, darkGray, ligthGray, black } from '../utils/colors'
 import TextButton from './TextButton'
+import { connect } from 'react-redux'
 
 class AddCard extends Component {
+  state = {
+    question: '',
+    answer: ''
+  }
+
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'Add card'
     }
   }
 
+  addCard = (question, answer) => {
+    const { addCardFunc, deck } = this.props.navigation.state.params
+
+    let questionObj = {
+      question,
+      answer
+    }
+
+    addCardFunc(questionObj, deck)
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.inputWrapper}>
-          <TextInput style={styles.input} placeholder="Question"></TextInput>
+          <TextInput style={styles.input} placeholder="Question" value={this.state.question}
+            onChangeText={(question) => this.setState({question})}></TextInput>
         </View>
         <View style={styles.inputWrapper}>
-          <TextInput style={styles.input} placeholder="Answer"></TextInput>
+          <TextInput style={styles.input} placeholder="Answer" value={this.state.answer}
+            onChangeText={(answer) => this.setState({answer})}></TextInput>
         </View>
-        <TouchableOpacity style={styles.submit}>
+        <TouchableOpacity style={styles.submit} onPress = {() => this.addCard(this.state.question, this.state.answer)}>
           <Text style={styles.submitBtnText}>
             Submit
           </Text>
@@ -73,4 +92,11 @@ const styles = StyleSheet.create({
   }
 })
 
-export default AddCard
+function mapStateToProps () {
+  return {
+  }
+}
+
+export default connect(
+  mapStateToProps,
+)(AddCard)
