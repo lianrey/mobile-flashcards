@@ -50,7 +50,7 @@ class DeckDetail extends Component {
               Add card
           </TextButton>
           <TextButton backgroundColor={black} borderColor={black} textColor={white}
-            onPress={() => this.props.navigation.navigate('Quiz', { deck })}>
+            onPress={() => this.props.navigation.navigate('Quiz', { title: deck.title })}>
               Start Quiz
           </TextButton>
         </View>

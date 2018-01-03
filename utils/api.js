@@ -10,12 +10,11 @@ export function fetchDeck (title) {
   return AsyncStorage.getItem(DECKS_STORAGE_KEY)
     .then((results) => {
       const data = JSON.parse(results)
-      let newData = data.filter((d)=> {
+      return data.filter((d)=> {
         if(d.title === title){
           return d
         }
       })
-      AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(newData))
     })
 }
 

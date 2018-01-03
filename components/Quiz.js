@@ -6,6 +6,7 @@ import {
   clearLocalNotification,
   setLocalNotification
 } from '../utils/helpers'
+import { fetchDeck } from '../utils/api'
 
 class Quiz extends Component {
   state = {
@@ -14,7 +15,8 @@ class Quiz extends Component {
     currentIndex: 0,
     theEnd: false,
     score: 0,
-    correctTotal: 0
+    correctTotal: 0,
+    deck: {questions: [], title: ''}
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -23,23 +25,26 @@ class Quiz extends Component {
     }
   }
 
-  reset = () => {
+  reset = (deck) => {
     return {
-      title: this.props.navigation.state.params.deck.questions[0].question,
+      title: deck.questions[0].question,
       subTitle: 'Answer',
       currentIndex: 0,
       theEnd: false,
       score: 0,
-      correctTotal: 0
+      correctTotal: 0,
+      deck: deck
     }
   }
 
   componentDidMount() {
-    this.setState(this.reset())
+    fetchDeck(this.props.navigation.state.params.title).then(deck => {
+      this.setState(this.reset(deck[0]))
+    })
   }
 
   toggleAnswer = () => {
-    const { deck } = this.props.navigation.state.params
+    const { deck } = this.state
 
     this.setState(
       {
@@ -51,7 +56,7 @@ class Quiz extends Component {
   }
 
   answerBtn = (type) => {
-    const { deck } = this.props.navigation.state.params
+    const { deck } = this.state
     const index = this.state.currentIndex + 1;
 
     this.setState(
@@ -69,8 +74,8 @@ class Quiz extends Component {
         )
       }
       else{
-        const score = (this.state.correctTotal * 100)/deck.questions.length
-
+        const score = parseFloat((this.state.correctTotal * 100)/deck.questions.length).toFixed(2);
+        
         clearLocalNotification()
           .then(setLocalNotification)
         this.setState(
@@ -84,11 +89,11 @@ class Quiz extends Component {
   }
 
   startOver = () => {
-    this.setState(this.reset())
+    this.setState(this.reset(this.state.deck))
   }
 
   render() {
-    const { deck } = this.props.navigation.state.params
+    const { deck } = this.state
 
     if(deck.questions.length === 0){
       return(
