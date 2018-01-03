@@ -22,12 +22,12 @@ class NewDeck extends Component {
     addDeckApi(deck).then(() => {
       dispatch(addDeck(deck))
       this.setState({ text: ''})
-      this.toHome()
+      this.toDeckDetail(deck)
     })
   }
 
-  toHome = () => {
-    this.props.navigation.dispatch(NavigationActions.back({key: 'NewDeck'}))
+  toDeckDetail = (deck) => {
+    this.props.navigation.navigate('DeckDetail', { deck: deck })
   }
 
   render() {
